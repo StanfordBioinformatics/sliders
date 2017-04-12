@@ -10,3 +10,6 @@ Currently only includes one module: flextableparser. To use::
     >>> parser.add_static_values(dict)
     >>> parser.parse_file(input_file, output_file_handle)
     >>> output = parser.parse_file(input_file)
+
+    $ text2table --input_file=file.txt --schema=fastqc --output_file=out.csv
+    $ text2table --input_file=file.txt --schema=fastqc --output_file=out.csv --static_values=series:test,sample:A
