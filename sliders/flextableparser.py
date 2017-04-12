@@ -12,6 +12,7 @@ import pdb
 import sys
 import json 
 
+# Dev: Only used in Python2
 from itertools import ifilter
 
 class FlexTableParser:
@@ -21,7 +22,7 @@ class FlexTableParser:
     def __init__(self, config_file=None, static_values={}):
 
         self.config = None
-        self.schema = None
+        self.columns = None
         self.dimensions = None
         self.overlap = None
         self.match_patterns = []
@@ -52,8 +53,8 @@ class FlexTableParser:
         static_values = self.static_values.copy()
         table_values.update(static_values)
 
-        # Populate out string ordered by schema
-        strings = [str(table_values[column]) for column in self.schema]
+        # Populate output string ordered by columns
+        strings = [str(table_values[column]) for column in self.columns]
         out_str = ','.join(strings) + '\n'
         self.out_fh.write(out_str)
 
@@ -89,8 +90,8 @@ class FlexTableParser:
                 table_values['index'] = elements[index_element]
                 table_values['value'] = elements[value_element]
 
-                # Convert all values to schema ordered strings
-                strings = [str(table_values[column]) for column in self.schema]
+                # Convert all values to column ordered strings
+                strings = [str(table_values[column]) for column in self.columns]
                 out_str = ','.join(strings) + '\n'
                 self.out_fh.write(out_str)
 
@@ -111,12 +112,12 @@ class FlexTableParser:
             pdb.set_trace()
 
     def configure(self, json):
-        """Establish parsing schema from JSON file.
+        """Get parsing schema from JSON file.
         """
 
         with open(json, 'r') as config_fh:
             self.config = json.load(config_fh)
-        self.schema = self.config['schema']
+        self.columns = self.config['columns']
         self.dimensions = self.config['dimensions']
         self.overlap = bool(self.config['overlap'])
 
@@ -129,6 +130,8 @@ class FlexTableParser:
     def add_static_values(self, dict):
         """Specify static table column values.
         """
+
+        self.static_values = dict
 
     def parse_file(self, in_file):
         """Parse file.
