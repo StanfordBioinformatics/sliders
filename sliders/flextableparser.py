@@ -11,9 +11,24 @@ import re
 import pdb
 import sys
 import json 
+import logging 
+import datetime
 
-# Dev: Only used in Python2
-from itertools import ifilter
+def configure_logger(source_type, name=None, file_handle=False):
+    # Configure Logger object
+    logger = logging.getLogger(source_type)    # Create logger object
+    logger.setLevel(logging.DEBUG)
+
+    timestamp = str(datetime.datetime.now()).split()[0]     # yyyy-mm-dd
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
+    # Add logging stream handler
+    STREAM = logging.StreamHandler(sys.stderr)
+    STREAM.setLevel(logging.DEBUG)
+    STREAM.setFormatter(formatter)
+    logger.addHandler(STREAM)
+
+    return logger
 
 class FlexTableParser:
     """Convert structured text data into CSV format.
@@ -28,6 +43,8 @@ class FlexTableParser:
         self.match_patterns = []
         self.static_values = static_values
 
+        self.logger = configure_logger('FlexTableParser')
+
         if config_file:
             self.configure(config_file)
 
@@ -40,9 +57,8 @@ class FlexTableParser:
 
         """
 
-        print('Writing single row for dimension: {}'.format(dimension_name))
-        # Fixed at 1 when writing single row
-        index = ''
+        self.logger.info('Writing single row for dimension: {}'.format(dimension_name))
+        index = ''  # Fixed at 1 when writing single row
         
         # Combine line-entry values with static values
         table_values = {
@@ -55,15 +71,16 @@ class FlexTableParser:
 
         # Populate output string ordered by columns
         strings = [str(table_values[column]) for column in self.columns]
-        out_str = ','.join(strings) + '\n'
-        self.out_fh.write(out_str)
+        out_str = ','.join(strings)
+        # self.out_fh.write(out_str)
+        print(out_str)
 
     def _write_series_rows(self, dimension, in_fh):
         """Write series of rows.
         """
 
         dimension_name = dimension['name']
-        print('Writing series of rows for dimension: {}'.format(dimension_name))
+        self.logger.info('Writing series of rows for dimension: {}'.format(dimension_name))
         # Indexes of the delimiter separated line.
         # (I know, I know... need better terminology.)
         index_element = dimension['index']  # type: int
@@ -78,44 +95,44 @@ class FlexTableParser:
 
         while stop == False:
             table_values = self.static_values.copy()
-            line = in_fh.next()
+            line = in_fh.readline()
             #pdb.set_trace()
             stop_match = re.match(stop_pattern, line)
             if stop_match:
                 stop = True
             else:
                 elements = line.split(delimiter)
-                print(elements)
+                #self.logger.info(elements)
                 table_values['dimension'] = dimension['name']
                 table_values['index'] = elements[index_element]
                 table_values['value'] = elements[value_element]
 
                 # Convert all values to column ordered strings
                 strings = [str(table_values[column]) for column in self.columns]
-                out_str = ','.join(strings) + '\n'
-                self.out_fh.write(out_str)
+                out_str = ','.join(strings)
+                #self.out_fh.write(out_str)
+                print(out_str)
 
     def _parse_match(self, match, in_fh):
         """Parse single line pattern match.
         """
-        dimension_name = match.groupdict().keys()[0]
-        print(dimension_name)
+        dimension_name = list(match.groupdict().keys())[0]
         row_type = self.dimensions[dimension_name]['row_type']
         if row_type == 'single':
-            value = match.groupdict().values()[0]
+            value = list(match.groupdict().values())[0]
             self._write_single_row(dimension_name, value)
         elif row_type == 'series':
             dimension = self.dimensions[dimension_name]
             self._write_series_rows(dimension, in_fh)
         else:
-            print('Error: Invalid dimension type: {}'.format(dimension_type))
+            self.logger.error('Invalid dimension type: {}'.format(dimension_type))
             pdb.set_trace()
 
-    def configure(self, json):
+    def configure(self, config_file):
         """Get parsing schema from JSON file.
         """
 
-        with open(json, 'r') as config_fh:
+        with open(config_file, 'r') as config_fh:
             self.config = json.load(config_fh)
         self.columns = self.config['columns']
         self.dimensions = self.config['dimensions']
@@ -127,36 +144,44 @@ class FlexTableParser:
             regex_pattern = dimension['regex_pattern']
             self.match_patterns.append(regex_pattern)
 
-    def add_static_values(self, dict):
+    def add_static_values(self, static_dict):
         """Specify static table column values.
         """
-
-        self.static_values = dict
+        
+        self.static_values = json.loads(static_dict)
 
     def parse_file(self, in_file):
         """Parse file.
         """
         with open(in_file, 'r') as in_fh:
-            for line in in_fh:
+            self.logger.info('Parsing file: {}'.format(in_file))
+            while in_fh:
+                line = in_fh.readline()
+                if not line:
+                    self.logger.info('End of file: {}\n'.format(in_file))
+                    break
+                # Dev: what does this return
                 matches = [re.match(regex, line) for regex in self.match_patterns]
-                true_matches = list(ifilter(lambda x: x > 0, matches))
+                #true_matches = list(ifilter(lambda x: x > 0, matches))
+                true_matches = [x for x in matches if x != None]
+                filter 
                 if len(true_matches) == 0:
                     continue
                 elif len(true_matches) > 1:
-                    print('\nWarning: Multiple regex patterns matched this line.')
-                    print(line.strip())
-                    #pdb.set_trace()
+                    self.logger.warning('Multiple regex patterns matched this line.')
+                    self.logger.warning(line.strip())
+
                     if self.overlap:
                         # Potential for error if you have overlapping matches 
                         # & and is a series
                         for match in true_matches:
                             self._parse_match(match, in_fh)
                     else:
-                        print('Error: Configuration file does not allow for overlapping patterns')
+                        self.logger.error('Error: Configuration file does not allow for overlapping patterns')
                         sys.exit()
 
                 elif len(true_matches) == 1:
-                    print('\nInfo: Found single match for line.')
-                    print(line.strip())
+                    self.logger.info('Found single match for line: ')
+                    self.logger.info(line.strip())
                     self._parse_match(true_matches[0], in_fh)
                         
