@@ -1,8 +1,6 @@
 {
     "overlap": false,
     "columns": [
-        "series",
-        "sample",
         "dimension",
         "index",
         "value"
