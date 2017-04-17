@@ -1,5 +1,5 @@
 # Compiled python modules
-*.pyc
+/sliders/*.pyc
 
 # Setuptools distribution folder.
 /dist/
@@ -8,9 +8,9 @@
 /*.egg-info
 
 # Sublime files
-*.sublime-project
-*.sublime-workspace
+/*.sublime-project
+/*.sublime-workspace
 
 # Test in/out files
-tests/*.csv
-tests/*.out
+/sliders/tests/*.csv
+/sliders/tests/*.out
