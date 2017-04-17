@@ -99,6 +99,9 @@ class Text2Table():
         args = parser.parse_args(argv)
         return(args)
 
-if __name__ == '__main__':
+def main():
     Text2Table(sys.argv)
+
+if __name__ == '__main__':
+    main()
 

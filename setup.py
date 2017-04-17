@@ -111,7 +111,7 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points={
         'console_scripts': [
-            'text2table=sliders.cl_flextableparser:main',
+            'text2table=sliders.text2table:main',
         ],
     },
 
