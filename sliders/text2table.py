@@ -7,13 +7,18 @@ __author__ = 'pbilling@stanford.edu (Paul Billing-Ross)'
 import sys
 import argparse
 import unittest
+from pkg_resources import resource_filename
 
 from . import flextableparser
-#import flextableparser
 
+RSC_PACKAGE = __name__
 BUILT_IN_SCHEMAS = {
-                    'fastqc': '../table_schemas/fastqc.json',
-                    'flagstat': '../table_schemas/flagstat.json'
+                    'fastqc': resource_filename(
+                                                RSC_PACKAGE, 
+                                                'table_schemas/fastqc.json'),
+                    'flagstat': resource_filename(
+                                                  RSC_PACKAGE, 
+                                                  'table_schemas/flagstat.json')
                    }
 
 class Text2Table():
@@ -24,7 +29,7 @@ class Text2Table():
         table_parser = flextableparser.FlexTableParser()
 
         # Parse command-line arguments
-        print(sys.argv)
+        #print(sys.argv)
         args = self.parse_args(argv[1:])
 
         # Configure parser with built-in schema or specify custom config file
@@ -51,49 +56,49 @@ class Text2Table():
 
         parser = argparse.ArgumentParser()
         parser.add_argument(
-                            'input_files',
+                            "input_files",
                             type = str,
                             nargs = '+',
                             help = 'Input file path')
         parser.add_argument(
-                            '-s',
-                            '--schema',
-                            dest = 'schema',
+                            "-s",
+                            "--schema",
+                            dest = "schema",
                             type = str,
-                            help = 'Table conversion schema',
-                            choices = ['fastqc', 'flagstat'],
+                            help = "Use built-in table conversion schema",
+                            choices = ["fastqc", "flagstat"],
                             required = False)
         parser.add_argument(
-                            '-j',
-                            '--json-file',
-                            dest = 'json_file',
+                            "-j",
+                            "--json-file",
+                            dest = "json_file",
                             type = str,
-                            help = 'JSON config file with table conversion schema',
+                            help = "Use custom JSON config file with table conversion schema. Only required if not using '-s' option.",
                             required = False)
         parser.add_argument(
-                            '-v',
-                            '--static-values',
-                            dest = 'static_values',
+                            "-v",
+                            "--static-values",
+                            dest = "static_values",
                             #nargs = '+',
-                            help = 'Static values to be added as columns',
+                            help = "Static values to be added as columns. i.e. '-v=series=test,sample=A'",
                             required = False)
         parser.add_argument(
-                            '-o',
-                            '--output-file',
-                            dest = 'output_file',
+                            "-o",
+                            "--output-file",
+                            dest = "output_file",
                             type = str,
-                            help = 'Output file path',
+                            help = "Output file path",
                             required = False)
         parser.add_argument(
-                            '-a',
-                            '--append',
-                            dest = 'append',
+                            "-a",
+                            "--append",
+                            dest = "append",
                             type = bool,
-                            help = 'Append instead of write output file',
+                            help = "Append instead of write output file",
                             default = False)
 
         if len(argv) < 1:
-            print('No arguments specified')
+            print("No arguments specified")
             parser.print_help()
             sys.exit()
         args = parser.parse_args(argv)

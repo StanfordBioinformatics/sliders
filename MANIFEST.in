@@ -1,2 +1,2 @@
 include README.rst
-include table_schemas/*.json
+include sliders/table_schemas/*.json

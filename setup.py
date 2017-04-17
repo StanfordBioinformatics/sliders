@@ -96,9 +96,10 @@ setup(
     # have to be included in MANIFEST.in as well.
     package_data={
         'table_schemas': [
-                          'table_schemas/fastqc.json',
-                          'table_schemas/flagstat.json'],
+                          'sliders/table_schemas/fastqc.json',
+                          'sliders/table_schemas/flagstat.json'],
     },
+    include_package_data=True,
 
     # Although 'package_data' is the preferred approach, in some case you may
     # need to place data files outside of your packages. See:
