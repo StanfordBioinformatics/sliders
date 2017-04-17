@@ -134,6 +134,7 @@ class FlexTableParser:
         """Get parsing schema from JSON file.
         """
 
+        self.logger.info("Configuring FlexTableParser using JSON file: {}".format(config_file))
         with open(config_file, 'r') as config_fh:
             self.config = json.load(config_fh)
         self.columns = self.config['columns']
