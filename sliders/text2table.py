@@ -8,7 +8,7 @@ import sys
 import argparse
 import unittest
 
-from sliders import flextableparser
+from . import flextableparser
 #import flextableparser
 
 BUILT_IN_SCHEMAS = {
