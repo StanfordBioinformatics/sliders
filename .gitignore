@@ -10,3 +10,7 @@
 # Sublime files
 *.sublime-project
 *.sublime-workspace
+
+# Test in/out files
+tests/*.csv
+tests/*.out
