@@ -1,7 +1,7 @@
 # Sliders
 
 ### Description:
-Python package for refactoring and reformatting text data.
+Python package for refactoring and formatting text data.
 
 ### Installation:
 
