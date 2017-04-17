@@ -8,8 +8,8 @@ import sys
 import argparse
 import unittest
 
-#from sliders import flextableparser
-import flextableparser
+from sliders import flextableparser
+#import flextableparser
 
 BUILT_IN_SCHEMAS = {
                     'fastqc': '../table_schemas/fastqc.json',
@@ -35,8 +35,10 @@ class Text2Table():
         table_parser.configure(schema_file)
 
         if args.static_values:
-            # To-do: Parse key:value string
-            table_parser.add_static_values(args.static_values)
+            dict_items = (item.split('=') for item in args.static_values.split(','))
+            for item in dict_items:
+                print(item)
+                table_parser.add_static_value(item[0], item[1])
 
         if args.output_file:
             sys.stdout = open(args.output_file, 'w')

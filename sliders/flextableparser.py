@@ -14,6 +14,8 @@ import json
 import logging 
 import datetime
 
+from collections import OrderedDict
+
 def configure_logger(source_type, name=None, file_handle=False):
     # Configure Logger object
     logger = logging.getLogger(source_type)    # Create logger object
@@ -34,14 +36,14 @@ class FlexTableParser:
     """Convert structured text data into CSV format.
     """
 
-    def __init__(self, config_file=None, static_values={}):
+    def __init__(self, config_file=None):
 
         self.config = None
         self.columns = None
         self.dimensions = None
         self.overlap = None
         self.match_patterns = []
-        self.static_values = static_values
+        self.static_values = OrderedDict()
 
         self.logger = configure_logger('FlexTableParser')
 
@@ -144,11 +146,15 @@ class FlexTableParser:
             regex_pattern = dimension['regex_pattern']
             self.match_patterns.append(regex_pattern)
 
-    def add_static_values(self, static_dict):
+    def add_static_value(self, key, value):
         """Specify static table column values.
         """
         
-        self.static_values = json.loads(static_dict)
+        self.static_values.update({key:value})
+        self.columns.append(key)
+
+        self.logger.info('Added static values: {}'.format(self.static_values))
+        self.logger.info('Updated column list: {}'.format(self.columns))
 
     def parse_file(self, in_file):
         """Parse file.
