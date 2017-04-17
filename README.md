@@ -1,9 +1,13 @@
 # Sliders
 
+### Description:
+Python package for refactoring and reformatting text data.
+
 ### Installation:
 
     $ pip install sliders
 
+# Modules
 ## text2table 
 
 ### Description:
