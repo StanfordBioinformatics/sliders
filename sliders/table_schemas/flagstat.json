@@ -1,8 +1,6 @@
 {
     "overlap": true,
     "columns": [
-        "series",
-        "sample",
         "dimension",
         "index",
         "value"
@@ -75,12 +73,12 @@
         },
         "mate_mapped_diff_chr": {
             "name": "mate_mapped_diff_chr",
-            "regex_pattern": "(?P<mate_mapped_diff_chr>\\d+) \\+ \\d+ with mate mapped to a different chr",
+            "regex_pattern": "(?P<mate_mapped_diff_chr>\\d+) \\+ \\d+ with mate mapped to a different chr$",
             "row_type": "single"
         },
         "mate_mapped_diff_chr_mapQ5": {
             "name": "mate_mapped_diff_chr_mapQ5",
-            "regex_pattern": "(?P<mate_mapped_diff_chr_mapQ5>\\d+) \\+ \\d+ with mate mapped to a different chr (mapQ>=5)",
+            "regex_pattern": "(?P<mate_mapped_diff_chr_mapQ5>\\d+) \\+ \\d+ with mate mapped to a different chr \\(mapQ>",
             "row_type": "single"
         }
     }
