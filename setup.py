@@ -113,6 +113,7 @@ setup(
     entry_points={
         'console_scripts': [
             'text2table=sliders.text2table:main',
+            'transpose=sliders.transpose:main'
         ],
     },
 
