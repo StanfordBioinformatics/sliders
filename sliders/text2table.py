@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 """Command-line tool for converting text2table using FlexTableParser.
 """
 
@@ -18,7 +18,13 @@ BUILT_IN_SCHEMAS = {
                                                 'table_schemas/fastqc.json'),
                     'flagstat': resource_filename(
                                                   RSC_PACKAGE, 
-                                                  'table_schemas/flagstat.json')
+                                                  'table_schemas/flagstat.json'),
+                    'vcfstats': resource_filename(
+                                                  RSC_PACKAGE,
+                                                  'table_schemas/vcfstats.json'),
+                    'vcfhethom': resource_filename(
+                                                   RSC_PACKAGE,
+                                                   'table_schemas/vcfhethom.json')
                    }
 
 class Text2Table():
@@ -66,7 +72,7 @@ class Text2Table():
                             dest = "schema",
                             type = str,
                             help = "Use built-in table conversion schema",
-                            choices = ["fastqc", "flagstat"],
+                            choices = ["fastqc", "flagstat", "vcfstats", "vcfhethom"],
                             required = False)
         parser.add_argument(
                             "-j",
