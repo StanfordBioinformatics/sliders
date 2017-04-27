@@ -19,12 +19,15 @@ BUILT_IN_SCHEMAS = {
                     'flagstat': resource_filename(
                                                   RSC_PACKAGE, 
                                                   'table_schemas/flagstat.json'),
-                    'vcfstats': resource_filename(
-                                                  RSC_PACKAGE,
-                                                  'table_schemas/vcfstats.json'),
-                    'vcfhethom': resource_filename(
-                                                   RSC_PACKAGE,
-                                                   'table_schemas/vcfhethom.json')
+                    'vcflib_stats': resource_filename(
+                                                      RSC_PACKAGE,
+                                                      'table_schemas/vcflib_vcfstats.json'),
+                    'vcflib_hethom': resource_filename(
+                                                       RSC_PACKAGE,
+                                                       'table_schemas/vcflib_vcfhethom.json'),
+                    'rtg_vcfstats': resource_filename(
+                                                      RSC_PACKAGE,
+                                                      'table_schemas/rtg_vcfstats.json')
                    }
 
 class Text2Table():
@@ -72,7 +75,7 @@ class Text2Table():
                             dest = "schema",
                             type = str,
                             help = "Use built-in table conversion schema",
-                            choices = ["fastqc", "flagstat", "vcfstats", "vcfhethom"],
+                            choices = ["fastqc", "flagstat", "vcflib_stats", "vcflib_hethom", "rtg_vcfstats"],
                             required = False)
         parser.add_argument(
                             "-j",
@@ -103,7 +106,7 @@ class Text2Table():
                             help = "Append instead of write output file",
                             default = False)
 
-        if len(argv) < 1:
+        if len(argv) < 2:
             print("No arguments specified")
             parser.print_help()
             sys.exit()
