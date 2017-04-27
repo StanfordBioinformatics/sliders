@@ -32,25 +32,6 @@ def configure_logger(source_type, name=None, file_handle=False):
 
     return logger
 
-def transpose(input_file, delimiter=None):
-    """Transpose file rows to columns.
-
-    Solution from Ashwini Chaudhary 
-    http://stackoverflow.com/questions/10507104/row-to-column-transposition-in-python
-    http://stackoverflow.com/users/846892/ashwini-chaudhary
-    """
-
-    with open(input_file) as f:
-        if delimiter:
-            lis = [x.split(delimiter) for x in f]
-        else:
-            lis = [x.split() for x in f]
-
-    for x in zip(*lis):
-        for y in x:
-            print(y+'\t', end='')
-        print('\n')
-
 class FlexTableParser:
     """Convert structured text data into CSV format.
     """
