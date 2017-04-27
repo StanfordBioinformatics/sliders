@@ -58,7 +58,7 @@ setup(
         # that you indicate whether you support Python 2, Python 3 or both.
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
-        #'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3',
         #'Programming Language :: Python :: 3.3',
         #'Programming Language :: Python :: 3.4',
         #'Programming Language :: Python :: 3.5',
@@ -95,9 +95,7 @@ setup(
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
     package_data={
-        'table_schemas': [
-                          'sliders/table_schemas/fastqc.json',
-                          'sliders/table_schemas/flagstat.json'],
+        'table_schemas': ['sliders/table_schemas/*.json'],
     },
     include_package_data=True,
 
@@ -112,8 +110,7 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points={
         'console_scripts': [
-            'text2table=sliders.text2table:main',
-            'transpose=sliders.transpose:main'
+            'text2table=sliders.text2table:main'
         ],
     },
 
