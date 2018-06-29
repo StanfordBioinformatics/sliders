@@ -45,7 +45,7 @@ class Text2Table():
         if args.schema:
             schema_file = BUILT_IN_SCHEMAS[args.schema]
         elif args.json_file:
-            schema_file = json_file
+            schema_file = args.json_file
         table_parser.configure(schema_file)
 
         if args.static_values:
