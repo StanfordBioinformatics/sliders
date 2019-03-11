@@ -16,6 +16,11 @@
             "regex_pattern": "\\%GC\\s+(?P<gc_content>\\d+)",
             "row_type": "single"
         },
+	"total_seq": {
+            "name": "total_seq",
+            "regex_pattern": "Total\\s+Sequences\\t(?P<total_seq>\\d+)",
+            "row_type": "single"
+        },
         "per_base_qual": {
             "name": "per_base_qual",
             "regex_pattern": "#Base\\s+Mean\\s+(?P<per_base_qual>Median)",
@@ -27,7 +32,7 @@
         },
         "seq_len": {
             "name": "seq_len",
-            "regex_pattern": "Sequence\\s+length\\s+(?P<seq_len>\\d+)",
+            "regex_pattern": "Sequence\\s+length\\s+[0-9].+-+(?P<seq_len>\\d+)",
             "row_type": "single"
         },
         "seq_quality": {
